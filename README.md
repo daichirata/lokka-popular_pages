@@ -16,12 +16,14 @@ using google analytics api, to get the most accessed entry for the specified per
     :start_date / (1.month.ago Time.now).beginning_of_month
     :end_date / (1.month.ago Time.now).end_of_month
 
-e.g.
+ e.g.
+
     <% popular_pages.each do |entry| #retrun Entry instance %>
       <%= link_to entry.title, entry.link %>
     <% end %>
 
-If you would like to change end date
+ If you would like to change end date
+
     <% popular_pages(:end_date => Time.now).each do |entry| #retrun Entry instance %>
       <%= link_to entry.title, entry.link %>
     <% end %>
