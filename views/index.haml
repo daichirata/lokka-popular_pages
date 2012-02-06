@@ -1,0 +1,17 @@
+%h2 Popular Pages
+%form{:action => '/admin/plugins/popular_pages', :method => 'post'}
+  %input{:type => 'hidden', :name => '_method', :value => 'put'}
+  .field
+    %label Email Address
+    %br
+    %input{:type => 'text', :name => 'popular_pages_email', :value => Option.popular_pages_email}
+  .field
+    %label Password
+    %br
+    %input{:type => 'password', :name => 'popular_pages_password', :value => Option.popular_pages_password}
+  .field
+    %label Tracker
+    %br
+    %input{:type => 'text', :name => 'popular_pages_tracker', :value => Option.popular_pages_tracker || Option.tracker}
+  .field
+    %input{:type => 'submit', :value => t('edit')}
