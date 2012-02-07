@@ -18,12 +18,15 @@ module Lokka
 
       app.helpers do
         def popular_pages(option = {})
+          return unless Analytics.valid?
+
           Analytics.response(option).map do |res|
             Entry(res.page_path.sub(/\//, ""))
           end.compact
         end
       end
     end
+
     module Analytics
       class Upvs
         extend Garb::Model
@@ -33,13 +36,10 @@ module Lokka
       end
 
       def self.profile
-        email    = Option.popular_pages_email
-        password = Option.popular_pages_password
-        tracker  = Option.popular_pages_tracker
-
         unless @profile
-          Garb::Session.login(email, password)
-          @profile = Garb::Management::Profile.all.detect {|p| p.web_property_id == tracker}
+          Garb::Session.login(Option.popular_pages_email, Option.popular_pages_password)
+          @profile =
+            Garb::Management::Profile.all.detect {|p| p.web_property_id == Option.popular_pages_tracker}
         end
         @profile
       end
@@ -52,6 +52,12 @@ module Lokka
             :end_date   => (1.month.ago Time.now).end_of_month }
 
         profile.upvs(default.merge(option))
+      end
+
+      def self.valid?
+        %w(popular_pages_tracker popular_pages_password popular_pages_email).all? do |attr|
+          Option.send(attr).present?
+        end
       end
     end
   end
