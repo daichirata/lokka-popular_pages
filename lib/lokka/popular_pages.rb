@@ -45,11 +45,12 @@ module Lokka
               :start_date => (1.month.ago Time.now).beginning_of_month,
               :end_date   => (1.month.ago Time.now).end_of_month }
 
-          profile.upvs(default.merge(option))
+          update_span = option.delete(:update_span) || 12
+          profile(update_span).upvs(default.merge(option))
         end
 
-        def profile
-          if update?
+        def profile(span)
+          if update?(span)
             if @profile
               Thread.new { @profile = _profile }
             else
@@ -65,10 +66,10 @@ module Lokka
           Garb::Management::Profile.all.detect {|p| p.web_property_id == Option.popular_pages_tracker}
         end
 
-        def update?
+        def update?(span)
           return true unless @time_stamp
 
-          if @time_stamp + (60 * 60 * 12) < Time.now
+          if @time_stamp + (60 * 60 * span.to_i) < Time.now
             @time_stamp = Time.now
           end
         end
