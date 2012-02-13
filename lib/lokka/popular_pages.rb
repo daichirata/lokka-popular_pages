@@ -51,11 +51,9 @@ module Lokka
         def profile
           if updated?
             if @profile
-              Thread.new {
-                @profile = _profile
-                @time_stamp = Time.now
-              }
+              Thread.new { @profile = _profile }
             else
+              @time_stamp = Time.now
               @profile = _profile
             end
           end
@@ -69,7 +67,10 @@ module Lokka
 
         def updated?
           return true unless @time_stamp
-          @time_stamp + (60 * 60 * 12) < Time.now
+
+          if @time_stamp + (60 * 60 * 12) < Time.now
+            @time_stamp = Time.now
+          end
         end
 
         def valid?
