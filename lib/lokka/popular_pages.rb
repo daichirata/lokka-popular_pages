@@ -49,7 +49,7 @@ module Lokka
         end
 
         def profile
-          if updated?
+          if update?
             if @profile
               Thread.new { @profile = _profile }
             else
@@ -65,7 +65,7 @@ module Lokka
           Garb::Management::Profile.all.detect {|p| p.web_property_id == Option.popular_pages_tracker}
         end
 
-        def updated?
+        def update?
           return true unless @time_stamp
 
           if @time_stamp + (60 * 60 * 12) < Time.now
